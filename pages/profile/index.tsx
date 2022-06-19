@@ -4,11 +4,10 @@ import Image from "next/image";
 import styles from "./Profile.module.css";
 import { userInfo } from "os";
 import * as React from "react";
-import useState from 'react'
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { Container, Card, Button, Grid, Text } from "@nextui-org/react";
+import { Container, Card, Button, Grid, Text, Modal, useModal } from "@nextui-org/react";
 import { PrismaClient } from "@prisma/client";
 import "react-activity-feed/dist/index.css";
 import { connect } from "getstream";
@@ -21,28 +20,149 @@ import {
   CommentList,
   CommentField,
   StatusUpdateForm,
+  UserBar,
   FollowButton,
 } from "react-activity-feed";
 import stream from "getstream";
-import { useEffect } from "react";
 import NavBar from "../components/NavBar";
-
+import { useState, useEffect } from "react";
 
 
 const apiKey = process.env.NEXT_PUBLIC_STREAM_API_KEY as string;
 const appId = process.env.NEXT_PUBLIC_STREAM_APP_ID as string;
 
 const Profile: NextPage = (props) => {
-  // const [followerListState, setFollowerListState] = useState([])
+  const [followingListState, setFollowingListState] = useState([])
+
+  const stream = require('getstream');
+  
+
   
   const session = useSession();
   // console.log('session',session.data?.user)
   // console.log("session", session.data?.user?.userToken);
 
-  const streamString = session.data?.user?.userToken;
-  console.log('streamString', streamString)
+  const userToken = session.data?.user?.userToken;
   const apiKey = process.env.NEXT_PUBLIC_STREAM_API_KEY as string;
   const appId = process.env.NEXT_PUBLIC_STREAM_APP_ID as string;
+  const client = stream.connect(apiKey, userToken, appId);
+ // loading activities and following stats from getStream.io
+ useEffect(() => {
+  // Activities()
+  UserFollowing()
+  // UserFollowers()
+}, []);
+
+const UserFollowing = () => {
+  //got the current user info from getstream
+  const userOne = client.feed('home', client.userId);
+  userOne.following().then((res) => {
+
+    let List = []
+    for (let i = 0; i < res.results.length; i++) {
+      const user = res.results[i].target_id.slice(5);
+      List.push(user)
+    }
+    console.log('following list', List)
+
+    setFollowingListState(List)
+
+  }).catch((err) => {
+    console.error(err)
+  })
+}
+
+// function to follow a user from the main activity in middle of page
+const followerUser = (userToFollow) => {
+  const userOne = client.feed('home', client.userId);
+  userOne.follow('user', userToFollow)
+  UserFollowing()
+  // UserFollowers()
+  // Activities()
+}
+
+const unfollowerUser = (userToUnFollow) => {
+  const userOne = client.feed('home', client.userId);
+  userOne.unfollow('user', userToUnFollow, { keepHistory: true })
+  UserFollowing()
+  // UserFollowers()
+  // Activities()
+}
+
+  const FollowingComponent = () => {
+    const { setVisible, bindings } = useModal();
+
+  return (
+  
+    <div>
+    
+  <Button auto shadow color="secondary" onClick={() => setVisible(true)}>
+    Following  {followingListState.length}
+  </Button>
+  <Modal
+    scroll
+    width="600px"
+    aria-labelledby="modal-title"
+    aria-describedby="modal-description"
+    {...bindings}
+  >
+    <Modal.Header>
+      <Text id="modal-title" size={18}>
+        Users you are Following
+      </Text>
+    </Modal.Header>
+    <Modal.Body>
+    <Grid >
+    <Grid>
+      <Grid >
+
+       
+       
+
+      </Grid>
+    </Grid>
+    <Grid >
+      {followingListState.slice(0, 10).map((follower) => (
+        <Grid >
+          <Container>
+            <Grid >
+              <Grid >
+              <UserBar
+            key={follower}
+            username={follower}
+            onClickUser={console.log}
+            avatar="https://i.pinimg.com/originals/4f/a1/41/4fa141173a1b04470bb2f850bc5da13b.png"
+              
+            timestamp="2022-04-19T07:44:11+00:00"
+            subtitle="a user you're following"
+                />
+                 <Button size='xs' onClick={() => unfollowerUser(follower)} >
+                  unfollow?
+                </Button>
+           
+              </Grid>
+             
+            </Grid>
+          </Container>
+        </ Grid >
+      ))}
+
+    </Grid>
+    </Grid>
+    </Modal.Body>
+    <Modal.Footer>
+      <Button auto flat color="error" onClick={() => setVisible(false)}>
+        Close
+      </Button>
+    
+    </Modal.Footer>
+  </Modal>
+
+  
+    </div>
+  )
+
+}
 
 
 
@@ -62,10 +182,10 @@ const Profile: NextPage = (props) => {
             {" "}
             Profile of {session.data?.user?.name}{" "}
           </h1>
-          <Link href="/home">
-            <Button>Home</Button>
-          </Link>
-          <StreamApp apiKey={apiKey} appId={appId} token={streamString}>
+          <FollowingComponent />
+
+          
+          <StreamApp apiKey={apiKey} appId={appId} token={userToken}>
             <StatusUpdateForm />
 
             {/* <NotificationDropdown notify /> */}
@@ -97,6 +217,8 @@ const Profile: NextPage = (props) => {
 };
 
 export async function getServerSideProps() {
+
+
 
 // //make a feed for user, add activity to that feed
 // let Userfeed = client.feed('user', username);

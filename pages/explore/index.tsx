@@ -4,7 +4,7 @@ import Image from "next/image";
 import styles from "./Explore.module.css";
 import { userInfo } from "os";
 import * as React from "react";
-import { useState, useEffect } from "react";
+
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { Container, Card, Button, Grid, Text } from "@nextui-org/react";
@@ -33,7 +33,7 @@ const Explore: NextPage = ({
   users,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const stream = require('getstream');
-  const [followingListState, setFollowingListState] = useState([])
+  
 
   const session = useSession();
   const userToken = session.data?.user?.userToken;
@@ -48,92 +48,7 @@ const Explore: NextPage = ({
   //what if we getUsers from getstream instead?
 
 
-  // loading activities and following stats from getStream.io
-  useEffect(() => {
-    // Activities()
-    UserFollowing()
-    // UserFollowers()
-  }, []);
-
-  const UserFollowing = () => {
-    //got the current user info from getstream
-    const userOne = client.feed('home', client.userId);
-    userOne.following().then((res) => {
-
-      let List = []
-      for (let i = 0; i < res.results.length; i++) {
-        const user = res.results[i].target_id.slice(5);
-        List.push(user)
-      }
-      console.log('following list', List)
-
-      setFollowingListState(List)
-
-    }).catch((err) => {
-      console.error(err)
-    })
-  }
-
-  // function to follow a user from the main activity in middle of page
-  const followerUser = (userToFollow) => {
-    const userOne = client.feed('home', client.userId);
-    userOne.follow('user', userToFollow)
-    UserFollowing()
-    // UserFollowers()
-    // Activities()
-  }
-
-  const unfollowerUser = (userToUnFollow) => {
-    const userOne = client.feed('home', client.userId);
-    userOne.unfollow('user', userToUnFollow, { keepHistory: true })
-    UserFollowing()
-    // UserFollowers()
-    // Activities()
-  }
-
-  const FollowingComponent = () => {
-    return <Grid >
-      <Grid>
-        <Grid >
-
-          <Text >
-            Following {followingListState.length}
-          </Text>
-         
-
-        </Grid>
-      </Grid>
-      <Grid >
-        {followingListState.slice(0, 10).map((follower) => (
-          <Grid >
-            <Container>
-              <Grid >
-                <Grid >
-                <UserBar
-              key={follower}
-              username={follower}
-              onClickUser={console.log}
-              avatar="https://i.pinimg.com/originals/4f/a1/41/4fa141173a1b04470bb2f850bc5da13b.png"
-                
-              timestamp="2022-04-19T07:44:11+00:00"
-              subtitle="a user you're following"
-                  />
-                   <Button size='xs' onClick={() => unfollowerUser(follower)} >
-                    unfollow?
-                  </Button>
-             
-                </Grid>
-               
-              </Grid>
-            </Container>
-          </ Grid >
-        ))}
-
-      </Grid>
-    </Grid>
-
-  }
-
+ 
 
 
   return (
@@ -142,7 +57,6 @@ const Explore: NextPage = ({
         <NavBar />
         <main className={styles.main}>
           <h1 className={styles.title}> Explore </h1>
-          <FollowingComponent />
          
           <ul>
             {users.map((user) => (
