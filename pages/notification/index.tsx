@@ -17,6 +17,7 @@ import {
   CommentField,
   StatusUpdateForm,
   FollowButton,
+  NotificationFeed,
 } from "react-activity-feed";
 import stream from "getstream";
 import { useEffect } from "react";
@@ -31,7 +32,7 @@ const Notification: NextPage = (props) => {
   const session = useSession();
   const userToken = session.data?.user?.userToken;
   const username = session.data?.user?.username;
-  
+
   const apiKey = process.env.NEXT_PUBLIC_STREAM_API_KEY as string;
   const appId = process.env.NEXT_PUBLIC_STREAM_APP_ID as string;
 
@@ -62,36 +63,21 @@ const Notification: NextPage = (props) => {
         </Head>
 
         <main className={styles.main}>
-        <NavBar/>
+          <NavBar />
 
           <h1 className={styles.title}>
-           Notifications
+            Notifications
           </h1>
           <Link href="/home">
             <Button>Home</Button>
           </Link>
           <StreamApp apiKey={apiKey} appId={appId} token={userToken}>
-            <StatusUpdateForm />
 
-            {/* <NotificationDropdown notify /> */}
-            <FlatFeed
+            <NotificationDropdown notify />
+            <NotificationFeed
+              userId={username}
               notify
               feedGroup="notification"
-              Activity={(props) => (
-                <Activity
-                  {...props}
-                  Footer={() => (
-                    <div style={{ padding: "8px 16px" }}>
-                      <LikeButton {...props} />
-                      <CommentField
-                        activity={props.activity}
-                        onAddReaction={props.onAddReaction}
-                      />
-                      <CommentList activityId={props.activity.id} />
-                    </div>
-                  )}
-                />
-              )}
             />
           </StreamApp>
           <Card className={styles.header}>
@@ -104,33 +90,22 @@ const Notification: NextPage = (props) => {
 };
 
 export async function getServerSideProps() {
-  // let stream = require('getstream');
+  let stream = require('getstream');
 
 
 
-  // const client = stream.connect(apiKey, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiTG90dGllIn0.V0kKg0t5vF5IViHhhyJvzNqr7gvYkWNvqUIZKOjOMtw', appId);
+  const client = stream.connect(apiKey, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiamFrZSJ9.DcUg0vGH-JPuy4Tv0HYXuWvRdnNqEajgu_YuFVXmK9w', appId);
 
-
-  // // For the feed group 'user' and user id 'eric' get the feed
-  // // The user token is generated server-side for this user
-
-  // // this MADE the notification feed
-  // const notificationFeed = client.feed('notification', 'lottie', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiTG90dGllIn0.V0kKg0t5vF5IViHhhyJvzNqr7gvYkWNvqUIZKOjOMtw');
-
-
-
-  // // Add the activity to the feed
-  // notificationFeed.addActivity({
-  //   actor: 'SU:lottie',
-  //   verb: 'tweet',
-  //   object: 'hello this is from ServerSideProps'
-  // });
 
 
   //worked!
-  // const lottieFlatFeed = client.feed('user', 'lottie', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoibG90dGllIn0.1GfqRl6bJFhK-oQdsbHM-GVBvDLhROxp0Gi1N1qLC40');
-  // lottieFlatFeed.follow('user', 'alex');
 
+  const alexFlatFeed = client.feed('home', 'Alex', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiQWxleCJ9.WrMUsq2v2CQ1vWydp-umS2qAIxRb-nWgodbjWTZNJ0Q');
+  // const jakeFlatFeed = client.feed('home', 'jake', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiamFrZSJ9.DcUg0vGH-JPuy4Tv0HYXuWvRdnNqEajgu_YuFVXmK9w');
+  alexFlatFeed.follow('user', 'jake', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiamFrZSJ9.DcUg0vGH-JPuy4Tv0HYXuWvRdnNqEajgu_YuFVXmK9w');
+  alexFlatFeed.follow('user', 'Lottie', ' eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiTG90dGllIn0.V0kKg0t5vF5IViHhhyJvzNqr7gvYkWNvqUIZKOjOMtw');
+
+  // const alexFlatFeed
 
   return {
     props: {},

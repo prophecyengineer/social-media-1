@@ -52,7 +52,26 @@ const Home: NextPage = () => {
       
 
           <StreamApp apiKey={apiKey} appId={appId} token={token}>
-            <FlatFeed feedGroup="timeline" userId={username} />
+       
+          <FlatFeed
+              notify
+              feedGroup="home"
+              Activity={(props) => (
+                <Activity
+                  {...props}
+                  Footer={() => (
+                    <div style={{ padding: "8px 16px" }}>
+                      <LikeButton {...props} />
+                      <CommentField
+                        activity={props.activity}
+                        onAddReaction={props.onAddReaction}
+                      />
+                      <CommentList activityId={props.activity.id} />
+                    </div>
+                  )}
+                />
+              )}
+            />
 
           </StreamApp>;
         </main>
