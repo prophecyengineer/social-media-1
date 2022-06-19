@@ -16,6 +16,9 @@ export default function NavBar() {
                 <Link href='/home'>
                     <Button>Home</Button>
                 </Link>
+                <Link href='/explore'>
+                    <Button>Explore</Button>
+                </Link>
                 <Link href='/profile'>
                     <Button>Profile</Button>
                 </Link>
