@@ -56,21 +56,41 @@ const Home: NextPage = () => {
           <FlatFeed
               notify
               feedGroup="home"
-              Activity={(props) => (
-                <Activity
-                  {...props}
-                  Footer={() => (
-                    <div style={{ padding: "8px 16px" }}>
-                      <LikeButton {...props} />
-                      <CommentField
-                        activity={props.activity}
-                        onAddReaction={props.onAddReaction}
-                      />
-                      <CommentList activityId={props.activity.id} />
-                    </div>
-                  )}
-                />
-              )}
+              Activity={(props) => {
+                console.log("props", props)
+                let activity
+                if (props.activity?.actor?.data) {
+                  activity = {
+                    activity: {
+                      //give
+                      ...props.activity,
+                      actor: {
+                        data: {
+                          name: props.activity.actor.id
+                        }
+                      }
+                    }
+                  } as ActivityProps
+                }
+
+                return (
+                  <Activity
+                    {...props}
+                    // data={{ name: props.activity.actor.data.id }}
+                    activity={activity?.activity || props.activity}
+                    Footer={() => (
+                      <div style={{ padding: "8px 16px" }}>
+                        <LikeButton {...props} />
+                        <CommentField
+                          activity={props.activity}
+                          onAddReaction={props.onAddReaction}
+                        />
+                        <CommentList activityId={props.activity.id} />
+                      </div>
+                    )}
+                  />
+                )
+              }}
             />
 
           </StreamApp>;
