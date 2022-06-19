@@ -97,13 +97,13 @@ export async function getServerSideProps() {
   const client = stream.connect(apiKey, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiamFrZSJ9.DcUg0vGH-JPuy4Tv0HYXuWvRdnNqEajgu_YuFVXmK9w', appId);
 
 
-
+ 
   //worked!
 
-  const alexFlatFeed = client.feed('home', 'Alex', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiQWxleCJ9.WrMUsq2v2CQ1vWydp-umS2qAIxRb-nWgodbjWTZNJ0Q');
+  const alexFlatFeed = client.feed('home', 'alex', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiYWxleCJ9.Dj99sRGyL1duxpxvR1ulLw6IEnuSAyqv07tlD4tNGoQ');
   // const jakeFlatFeed = client.feed('home', 'jake', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiamFrZSJ9.DcUg0vGH-JPuy4Tv0HYXuWvRdnNqEajgu_YuFVXmK9w');
-  alexFlatFeed.follow('user', 'jake', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiamFrZSJ9.DcUg0vGH-JPuy4Tv0HYXuWvRdnNqEajgu_YuFVXmK9w');
-  alexFlatFeed.follow('user', 'Lottie', ' eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiTG90dGllIn0.V0kKg0t5vF5IViHhhyJvzNqr7gvYkWNvqUIZKOjOMtw');
+  // alexFlatFeed.follow('user', 'jake', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiamFrZSJ9.DcUg0vGH-JPuy4Tv0HYXuWvRdnNqEajgu_YuFVXmK9w');
+  alexFlatFeed.follow('user', 'lottie', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoibG90dGllIn0.JtPcDkX2Ax-NSP2vbNvZOwH0ZLXs97vEYp219fthvGk');
 
   // const alexFlatFeed
 

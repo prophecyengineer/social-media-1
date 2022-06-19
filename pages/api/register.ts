@@ -33,9 +33,10 @@ export default async (req, res) => {
       console.log("make a stream token with", username, userToken);
 
       
+      
       const hash = await bcrypt.hash(password, 0);
 
-      await prisma.users.create({
+      await prisma.user.create({
         data: {
           name: name,
           username: username,

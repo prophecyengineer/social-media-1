@@ -26,6 +26,7 @@ import stream from "getstream";
 import { signOut, useSession } from "next-auth/react";
 import NavBar from "../components/NavBar";
 import { connect } from "getstream";
+import UserPost from "../components/UserPost";
 
 
 
@@ -57,6 +58,7 @@ const Explore: NextPage = ({
         <NavBar />
         <main className={styles.main}>
           <h1 className={styles.title}> Explore </h1>
+          
          
           <ul>
             {users.map((user) => (
@@ -65,6 +67,50 @@ const Explore: NextPage = ({
               </li>
             ))}
           </ul>
+          <Text h1>Global Feed all users posts to go here</Text>
+          <UserPost/>
+          <StreamApp apiKey={apiKey} appId={appId} token='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiZ2xvYmFsVXNlciJ9.eiHWrONEGfoYxVDsSCNONfX7xqlar6QRbY0_ZCC6tc0'>
+            {/* <StatusUpdateForm/> */}
+            <FlatFeed
+              notify
+              feedGroup="user"
+              Activity={(props) => {
+                console.log("props", props);
+                let activity;
+                if (props.activity?.actor?.data) {
+                  activity = {
+                    activity: {
+                      //give
+                      ...props.activity,
+                      actor: {
+                        data: {
+                          name: props.activity.actor.id,
+                        },
+                      },
+                    },
+                  } as ActivityProps;
+                }
+
+                return (
+                  <Activity
+                    {...props}
+                    // data={{ name: props.activity.actor.data.id }}
+                    activity={activity?.activity || props.activity}
+                    Footer={() => (
+                      <div style={{ padding: "8px 16px" }}>
+                        <LikeButton {...props} />
+                        <CommentField
+                          activity={props.activity}
+                          onAddReaction={props.onAddReaction}
+                        />
+                        <CommentList activityId={props.activity.id} />
+                      </div>
+                    )}
+                  />
+                );
+              }}
+            />
+          </StreamApp>
         </main>
       </div>
     </>
@@ -78,7 +124,7 @@ export async function getServerSideProps() {
 
   const prisma = new PrismaClient();
 
-  const users = await prisma.users.findMany();
+  const users = await prisma.user.findMany();
   // const users = await res.json()
 
 

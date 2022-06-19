@@ -7,7 +7,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model users {
+model User {
   userId       Int      @id @default(autoincrement())
   registeredAt DateTime @default(now())
   name         String   @db.VarChar(250)
@@ -16,4 +16,17 @@ model users {
   password     String   @db.VarChar(250)
   userToken    String   @db.VarChar(250)
   isActive     String   @default("1") @db.Char(1)
+  post         Post[]
+}
+
+model Post {
+  id          Int      @id @default(autoincrement())
+  title       String   @db.VarChar(250)
+  description String   @db.VarChar(250)
+  image       String   @db.VarChar(250)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now())
+
+  users       User? @relation(fields: [usersUserId], references: [userId])
+  usersUserId Int?
 }

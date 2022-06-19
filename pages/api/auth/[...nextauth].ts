@@ -31,7 +31,7 @@ const configuration = {
       credentials: {},
       async authorize(credentials) {
         try {
-          const user = await prisma.users.findFirst({
+          const user = await prisma.user.findFirst({
             where: {
               username: credentials.username,
             },

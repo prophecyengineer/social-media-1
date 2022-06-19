@@ -240,59 +240,6 @@ export async function getServerSideProps() {
 
 
 
-  // //make a feed for user, add activity to that feed
-  // let Userfeed = client.feed('user', username);
-
-  // Userfeed.addActivity({
-  //   'actor': client.user(username).ref(),
-  //   'verb': 'post',
-  //   'object': 'I love this picture',
-  //   'attachments': {
-  //     'og': {
-  //       'title': 'A kitten',
-  //       'description': 'Download this photo in Italy by Lorenzo Spoleti',
-  //       'url': 'http://placekitten.com/200/300',
-  //       'images': [
-  //         {
-  //           'image': 'http://placekitten.com/200/300'
-  //         }
-  //       ]
-  //     }
-  //   }
-  // })
-
-
-  // create a follow button
-
-
-  // let stream = require('getstream');
-
-  // const client = stream.connect(apiKey, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoia2F5YSJ9.yBStiSdcIHoZLy8DC8D5PnIPeRUofbUPbRe2YseM9BY', appId);
-
-
-  // const userStreamToken = client.feed('user', 'devil', userToken);
-
-
-  ''
-
-
-  // For the feed group 'user' and user id 'eric' get the feed
-  // The user token is generated server-side for this user
-  // const alexFeed = client.feed('user', 'alex', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiYWxleCJ9.Hwo1ZLYMkZjzEaRKy_KEEkJ5JUOOlgxSxuObxBF32uk');
-
-  // Add the activity to the feed
-  // alexFeed.addActivity({
-  //   actor: 'SU:alex',
-  //   verb: 'tweet',
-  //   object: 'hello this is from ServerSideProps'
-  // });
-
-
-  //worked!
-  // const lottieFlatFeed = client.feed('user', 'lottie', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoibG90dGllIn0.1GfqRl6bJFhK-oQdsbHM-GVBvDLhROxp0Gi1N1qLC40');
-  // lottieFlatFeed.follow('user', 'alex');
-
-
   return {
     props: {},
   };
