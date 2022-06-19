@@ -4,16 +4,39 @@ import Image from "next/image";
 import styles from "./Home.module.css";
 import { userInfo } from "os";
 import * as React from "react";
-import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { Container, Card, Button, Grid } from "@nextui-org/react";
 import { PrismaClient } from "@prisma/client";
-import UserCard from "../components/UserCard";
+import "react-activity-feed/dist/index.css";
+import { connect } from "getstream";
+import {
+  StreamApp,
+  NotificationDropdown,
+  FlatFeed,
+  LikeButton,
+  Activity,
+  CommentList,
+  CommentField,
+  StatusUpdateForm,
+  FollowButton,
+} from "react-activity-feed";
+import stream from "getstream";
+import { signOut, useSession } from "next-auth/react";
+import NavBar from "../components/NavBar";
+
+
 
 const Home: NextPage = ({
   users,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+
+  const session = useSession();
+  const token = session.data?.user?.userToken;
+  const username = session.data?.user?.username;
+  const apiKey = process.env.NEXT_PUBLIC_STREAM_API_KEY as string;
+  const appId = process.env.NEXT_PUBLIC_STREAM_APP_ID as string;
+
   return (
     <>
       <div className={styles.container}>
@@ -23,6 +46,7 @@ const Home: NextPage = ({
           <link rel="icon" href="/favicon.ico" />
         </Head>
 
+        <NavBar/>
         <main className={styles.main}>
           <h1 className={styles.title}> Home </h1>
           <ul>
@@ -33,12 +57,12 @@ const Home: NextPage = ({
             ))}
           </ul>
 
-          <Link href="profile">
-            <Button>Profile</Button>
-          </Link>
-          <Card className={styles.header}>
-            <Button onClick={signOut}>Sign Out</Button>
-          </Card>
+      
+
+          <StreamApp apiKey={apiKey} appId={appId} token={token}>
+            <FlatFeed feedGroup="timeline" userId={username} />
+
+          </StreamApp>;
         </main>
       </div>
     </>

@@ -28,49 +28,12 @@ export default async (req, res) => {
       //needed for getting user_id string for next step
       // const userToken = client.createUserToken(username);
 
-      //this one is wrong
+      // Attention!! this is needed, and ALSO  client.feed('user', username). they are the same feed we just ask for a token to access
       let userToken = client.createUserToken(username)
       console.log("make a stream token with", username, userToken);
 
-      //make a feed for user, add activity to that feed
-      let Userfeed = client.feed('user', username);
-      // let Timelinefeed = client.feed('timeline', username);
-      // let Notifyfeed = client.feed('notification', username);
-      Userfeed.addActivity({
-        'actor': client.user(username).ref(),
-        'verb': 'post',
-        'object': 'I love this picture',
-        'attachments': {
-          'og': {
-            'title': 'A kitten',
-            'description': 'Download this photo in Italy by Lorenzo Spoleti',
-            'url': 'http://placekitten.com/200/300',
-            'images': [
-              {
-                'image': 'http://placekitten.com/200/300'
-              }
-            ]
-          }
-        }
-      })
-
-      console.log('made feed for', username, Userfeed.token)
-
-      // const userToken = Userfeed.token
-
-      // console.log('user Tkoen', userToken)
-
-
-
-
-      // console.log('heres the notification one', Notifyfeed)
-      // console.log('heres the Timeline one', Timelinefeed)
-
-
+      
       const hash = await bcrypt.hash(password, 0);
-
-
-
 
       await prisma.users.create({
         data: {
