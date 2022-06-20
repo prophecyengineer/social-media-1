@@ -33,6 +33,7 @@ const Notification: NextPage = (props) => {
   const userToken = session.data?.user?.userToken;
   const username = session.data?.user?.username;
 
+  
   const apiKey = process.env.NEXT_PUBLIC_STREAM_API_KEY as string;
   const appId = process.env.NEXT_PUBLIC_STREAM_APP_ID as string;
 
@@ -63,7 +64,7 @@ const Notification: NextPage = (props) => {
         </Head>
 
         <main className={styles.main}>
-          <NavBar />
+     
 
           <h1 className={styles.title}>
             Notifications
@@ -94,10 +95,10 @@ export async function getServerSideProps() {
 
 
 
-  const client = stream.connect(apiKey, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiamFrZSJ9.DcUg0vGH-JPuy4Tv0HYXuWvRdnNqEajgu_YuFVXmK9w', appId);
+  const client = stream.connect(apiKey, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiZ2xvYmFsVXNlciJ9.eiHWrONEGfoYxVDsSCNONfX7xqlar6QRbY0_ZCC6tc0', appId);
 
 
- 
+
   //worked!
 
   const alexFlatFeed = client.feed('home', 'alex', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiYWxleCJ9.Dj99sRGyL1duxpxvR1ulLw6IEnuSAyqv07tlD4tNGoQ');

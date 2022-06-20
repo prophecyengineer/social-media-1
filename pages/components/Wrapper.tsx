@@ -2,6 +2,8 @@ import * as React from "react";
 import {useSession} from "next-auth/react";
 import Link from 'next/link'
 import {useRouter} from "next/router";
+import Header from "./Header";
+import NavBar from "./NavBar";
 
 export default function Wrapper(props)
 
@@ -14,7 +16,11 @@ export default function Wrapper(props)
         (router.pathname === "/" || router.pathname === '/register'))
     {
         return (
-            props.children
+            <>
+            <Header/>
+                {props.children}
+                <NavBar/>
+            </>
         )
     }
     else {

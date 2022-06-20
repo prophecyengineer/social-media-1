@@ -28,38 +28,41 @@ import NavBar from "../components/NavBar";
 import { connect } from "getstream";
 import UserPost from "../components/UserPost";
 
-
-
 const Explore: NextPage = ({
   users,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  const stream = require('getstream');
-  
+  const stream = require("getstream");
 
   const session = useSession();
   const userToken = session.data?.user?.userToken;
   const username = session.data?.user?.username;
   const apiKey = process.env.NEXT_PUBLIC_STREAM_API_KEY as string;
   const appId = process.env.NEXT_PUBLIC_STREAM_APP_ID as string;
-  const client = stream.connect(apiKey, userToken, appId);
+  // const client = stream.connect(apiKey, userToken, appId);
 
+  const client = stream.connect(
+    apiKey,
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiZ2xvYmFsVXNlciJ9.eiHWrONEGfoYxVDsSCNONfX7xqlar6QRbY0_ZCC6tc0",
+    appId
+  );
+
+  const globalFeed = client.feed(
+    "user",
+    "globalUser",
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiZ2xvYmFsVXNlciJ9.eiHWrONEGfoYxVDsSCNONfX7xqlar6QRbY0_ZCC6tc0"
+  );
+  globalFeed.follow("user", username, userToken);
 
   // const client = connect(apiKey, appId);
 
   //what if we getUsers from getstream instead?
 
-
- 
-
-
   return (
     <>
       <div className={styles.container}>
-        <NavBar />
         <main className={styles.main}>
           <h1 className={styles.title}> Explore </h1>
-          
-         
+
           <ul>
             {users.map((user) => (
               <li className={styles.title} key={user.username}>
@@ -68,8 +71,12 @@ const Explore: NextPage = ({
             ))}
           </ul>
           <Text h1>Global Feed all users posts to go here</Text>
-          <UserPost/>
-          <StreamApp apiKey={apiKey} appId={appId} token='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiZ2xvYmFsVXNlciJ9.eiHWrONEGfoYxVDsSCNONfX7xqlar6QRbY0_ZCC6tc0'>
+          {/* <UserPost/> */}
+          <StreamApp
+            apiKey={apiKey}
+            appId={appId}
+            token="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiZ2xvYmFsVXNlciJ9.eiHWrONEGfoYxVDsSCNONfX7xqlar6QRbY0_ZCC6tc0"
+          >
             {/* <StatusUpdateForm/> */}
             <FlatFeed
               notify
@@ -96,6 +103,44 @@ const Explore: NextPage = ({
                     {...props}
                     // data={{ name: props.activity.actor.data.id }}
                     activity={activity?.activity || props.activity}
+                    HeaderRight={() => (
+                      <Grid>
+                        <Button
+                          size="xs"
+                          onClick={() => {
+                            const currentUser = client.feed(
+                              "home",
+                              username,
+                              userToken
+                            );
+                            currentUser.follow(
+                              "user",
+                              props.activity.actor.id,
+                              userToken
+                            );
+                          }}
+                        >
+                          follow {props.activity.actor.id}
+                        </Button>
+                        <Button
+                          size="xs"
+                          onClick={() => {
+                            const currentUser = client.feed(
+                              "home",
+                              username,
+                              userToken
+                            );
+                            currentUser.unfollow(
+                              "user",
+                              props.activity.actor.id,
+                              userToken
+                            );
+                          }}
+                        >
+                          unfollow {props.activity.actor.id}
+                        </Button>
+                      </Grid>
+                    )}
                     Footer={() => (
                       <div style={{ padding: "8px 16px" }}>
                         <LikeButton {...props} />
@@ -118,27 +163,24 @@ const Explore: NextPage = ({
 };
 
 export async function getServerSideProps() {
-
-
-
-
   const prisma = new PrismaClient();
 
   const users = await prisma.user.findMany();
   // const users = await res.json()
 
+  let stream = require("getstream");
 
   return {
     props: {
       users: users.map(
         (user: user) =>
-        ({
-          ...user,
-          username: user.username.toString(),
-          name: user.name.toString(),
-          email: user.email.toString(),
-          registeredAt: user.registeredAt.toISOString(),
-        } as unknown as user)
+          ({
+            ...user,
+            username: user.username.toString(),
+            name: user.name.toString(),
+            email: user.email.toString(),
+            registeredAt: user.registeredAt.toISOString(),
+          } as unknown as user)
       ),
     },
   };

@@ -51,6 +51,9 @@ const configuration = {
                 email: user.email,
                 userToken: user.userToken,
                 isActive: user.isActive,
+                bio: user.bio,
+                image: user.image,
+                stripeToken: user.stripeToken,
               };
               return userAccount;
             } else {

@@ -45,7 +45,6 @@ export default function UserPost() {
         const data = {
             postInfoFormState: postInfoFormState,
           username: username,
-          username: username,
           userToken: userToken,
         };
     
@@ -63,25 +62,25 @@ export default function UserPost() {
 
   
 
-  const beginUpload = (tag) => {
-    const uploadOptions = {
-      cloudName: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
-      tags: [tag, "anImage"],
-      uploadPreset: process.env.NEXT_PUBLIC_CLOUDINARY_PRESET,
-    };
-    openUploadWidget(uploadOptions, (error, photos) => {
-      if (!error) {
-        if (photos.event === "success") {
-          setPostInfoFormState({
-            ...postInfoFormState,
-            image: photos.info.public_id,
-          });
-        }
-      } else {
-        console.error(error);
-      }
-    });
-  };
+//   const beginUpload = (tag) => {
+//     const uploadOptions = {
+//       cloudName: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
+//       tags: [tag, "anImage"],
+//       uploadPreset: process.env.NEXT_PUBLIC_CLOUDINARY_PRESET,
+//     };
+//     openUploadWidget(uploadOptions, (error, photos) => {
+//       if (!error) {
+//         if (photos.event === "success") {
+//           setPostInfoFormState({
+//             ...postInfoFormState,
+//             image: photos.info.public_id,
+//           });
+//         }
+//       } else {
+//         console.error(error);
+//       }
+//     });
+//   };
 
   const url = (publicId, options) => {
     const scOptions = Util.withSnakeCaseKeys(options);
@@ -149,16 +148,16 @@ export default function UserPost() {
                   />
                 </Grid>
                 <Grid>
-                  <Button
+                  {/* <Button
                     onClick={() => beginUpload("image")}
                     color="secondary"
                   >
                     Upload Photo
-                  </Button>
+                  </Button> */}
                 </Grid>
                 <Grid>
                   <Input
-                    required
+                
                     fullWidth
                     id="image"
                     label="Image"
