@@ -3,7 +3,15 @@ import Link from "next/link";
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
-
+import {
+  Input,
+  Card,
+  Text,
+  Container,
+  Button,
+  Grid,
+  Spacer,
+} from "@nextui-org/react";
 const axios = require("axios").default;
 
 export default function Register(props) {
@@ -41,45 +49,62 @@ export default function Register(props) {
 
   return (
     <>
-      <h1>Register</h1>
+      <Card variant="bordered">
+        <Card.Header>
+          <Text h2>Register</Text>
+        </Card.Header>
+        <Card.Body>
+          <form onSubmit={registerUser}>
+            <Grid alignItems="center">
+              <Input
+                bordered
+                label="Your Name"
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+              <Spacer />
 
-      <form onSubmit={registerUser}>
-        <label>
-          Name:{" "}
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-        </label>
-        <label>
-          UserName:{" "}
-          <input
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
-        </label>
-        <label>
-          Email:{" "}
-          <input
-            type="text"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </label>
-        <label>
-          Password:{" "}
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </label>
-        <button type="submit">Register User</button>
+              <Input
+                bordered
+                label="username"
+                labelLeft="audit.law/"
+                placeholder="lottie"
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+              />
+              <Spacer />
 
-        <Link href="/register">Register</Link>
-      </form>
+              <Input
+                bordered
+                label="Email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              <Spacer />
+              <Input
+                label="Password"
+                bordered
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              <Spacer />
+
+              <Button type="submit" bordered color="gradient" auto>
+                Register User
+              </Button>
+            </Grid>
+          </form>
+        </Card.Body>
+        <Card.Divider />
+
+        <Card.Footer>
+          <Link href="/register">New here? Sign up instead</Link>
+        </Card.Footer>
+      </Card>
     </>
   );
 }

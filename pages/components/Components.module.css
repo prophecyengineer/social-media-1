@@ -9,5 +9,5 @@
   position: sticky;
   bottom: 0;
   overflow: hidden;
-  width: 100%;
+  align-items: center;
 }

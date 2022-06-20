@@ -70,16 +70,14 @@ const Profile: NextPage = (props) => {
   // form submit handler for saving the profile data
   const handleFormSubmit = async (event) => {
     event.preventDefault();
+    const data = {
+      name: name,
+      bio: bio,
+      image: image,
+    };
     // first get right user lol
-    await prisma.user
-      .update({
-        where: { id: session.data?.user?.id },
-        data: {
-          name,
-          bio,
-          image,
-        },
-      })
+    console
+      .log("info just written in", data.name, data.bio, data.image)
       .then(() => {
         saveProfile();
       });
@@ -348,7 +346,7 @@ const Profile: NextPage = (props) => {
                     id="image"
                     label="Image"
                     name="image"
-                    placeholder="http://placekitten.com/200/300"
+                    placeholder="paste image link here"
                     autoComplete="image"
                     onChange={(e) => setImage(e.target.value)}
                   />

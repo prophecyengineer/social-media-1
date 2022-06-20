@@ -63,13 +63,13 @@ const Explore: NextPage = ({
         <main className={styles.main}>
           <h1 className={styles.title}> Explore </h1>
 
-          <ul>
+          {/* <ul>
             {users.map((user) => (
               <li className={styles.title} key={user.username}>
                 {user.username} {user.userToken}
               </li>
             ))}
-          </ul>
+          </ul> */}
           <Text h1>Global Feed all users posts to go here</Text>
           {/* <UserPost/> */}
           <StreamApp
@@ -92,6 +92,9 @@ const Explore: NextPage = ({
                       actor: {
                         data: {
                           name: props.activity.actor.id,
+
+                          //need to assign the profileImage as user?.image in getstream
+                          profileImage: session.data?.user?.image,
                         },
                       },
                     },
