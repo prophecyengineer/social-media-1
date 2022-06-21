@@ -35,7 +35,7 @@ export default async (req, res) => {
           email: email,
           password: hash,
           userToken: userToken,
-          bio: "",
+          bio: "something about me",
           image: "http://placekitten.com/200/300",
           stripeToken: "",
         },
